@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agenda | Soroterapia & EEG</title>
+<link rel="icon" type="image/jpeg" href="logo.jpeg">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1>Agenda Soro & EEG</h1>
+    </div>
+    <div class="topbar-right">
+      <button id="logoutBtn" class="btn ghost">Sair</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Abas de tipo de agenda -->
+    <div class="tabs">
+      <button class="tab-btn active" data-type="soro">Soroterapia</button>
+      <button class="tab-btn" data-type="eeg">Eletroencefalograma</button>
+    </div>
+
+    <!-- Controles do calendário (novo layout claro + segmented) -->
+    <section class="calendar-controls toolbar">
+      <div class="nav-pack">
+        <button id="prevBtn" class="icon-circle" title="Anterior">◀</button>
+        <button id="todayBtn" class="btn chip">Hoje</button>
+        <button id="nextBtn" class="icon-circle" title="Próximo">▶</button>
+      </div>
+
+      <div class="range-and-views">
+        <span id="rangeLabel" class="range-label"></span>
+        <div class="segmented" role="tablist" aria-label="Mudar visão">
+          <button class="view-btn active" data-view="month" role="tab" aria-selected="true">Mês</button>
+          <button class="view-btn" data-view="week" role="tab" aria-selected="false">Semana</button>
+          <button class="view-btn" data-view="day" role="tab" aria-selected="false">Dia</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calendário + painel lateral -->
+    <section class="calendar-shell">
+      <div id="calendar" class="calendar"></div>
+      <aside class="side-panel">
+        <h3 id="sideTitle">Agendamentos do dia</h3>
+        <ul id="dayList" class="appt-list"></ul>
+      </aside>
+    </section>
+  </main>
+
+  <!-- FAB: Novo agendamento -->
+  <button id="newApptBtn" class="fab" title="Novo Agendamento">+</button>
+
+  <!-- Modal permanece igual -->
+  <div id="modalBackdrop" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Novo Agendamento</h3>
+        <button id="closeModal" class="icon-btn" aria-label="Fechar">✕</button>
+      </div>
+      <form id="apptForm" class="modal-body">
+        <div class="grid-2">
+          <label>Data
+            <input type="date" id="apptDate" required />
+          </label>
+          <label>Hora
+            <input type="time" id="apptTime" required />
+          </label>
+        </div>
+        <div class="grid-2">
+          <label>Nome do Paciente
+            <input type="text" id="apptName" required placeholder="Nome completo" />
+          </label>
+          <label>CPF
+            <input type="text" id="apptCPF" required placeholder="000.000.000-00" />
+          </label>
+        </div>
+        <div class="grid-2">
+          <label>Telefone
+            <input type="tel" id="apptPhone" required placeholder="(00) 00000-0000" />
+          </label>
+          <label>Status
+                  <select id="apptStatus" required>
+          <option value="MARCADO">MARCADO</option>
+          <option value="CONFIRMADO">CONFIRMADO</option>
+          <option value="FEITO">FEITO</option> <!-- ⬅ novo -->
+        </select>
+
+          </label>
+        </div>
+        <input type="hidden" id="apptId" />
+        <div class="modal-footer">
+          <button type="button" id="deleteBtn" class="btn danger hidden">Excluir</button>
+          <button type="submit" class="btn primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if (!sessionStorage.getItem('logado')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

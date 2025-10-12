@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login • Agenda</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpeg">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* leve reforço para centralizar */
+    body.login-body{display:grid;place-items:center;min-height:100dvh;background:#fafafa;}
+    .login-card{width:min(420px,92vw);background:#fff;border:1px solid #dcdfe6;border-radius:18px;padding:1.5rem;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+    .login-card h1{margin:.2rem 0 1rem;font-size:1.25rem}
+    .login-form{display:flex;flex-direction:column;gap:1rem}
+    .login-form input{padding:.8rem 1rem;border:1px solid #dcdfe6;border-radius:10px;font-size:1rem}
+    .login-form button{border:0;background:#eb4034;color:#fff;padding:.9rem 1.2rem;border-radius:12px;font-weight:600;cursor:pointer}
+    .login-form button:hover{filter:brightness(.95)}
+    .error{color:#b91c1c;font-size:.9rem;margin-top:.3rem;display:none}
+    .logo-img-lg{height:72px;display:block;margin:0 auto .6rem auto}
+  </style>
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <h1>Acessar Agenda</h1>
+    <form id="loginForm" class="login-form" autocomplete="off">
+      <input id="user" type="text" placeholder="Usuário" required />
+      <input id="pass" type="password" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+      <div id="err" class="error">Usuário ou senha inválidos.</div>
+    </form>
+  </div>
+
+  <script>
+    const FORM = document.getElementById('loginForm');
+    const ERR = document.getElementById('err');
+
+    // Se já estiver logado, vai direto para a agenda
+    if (sessionStorage.getItem('logado') === '1') {
+      window.location.href = 'agenda.html';
+    }
+
+    FORM.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value;
+
+      if (u === 'agendamaringa' && p === 'maringa123') {
+        sessionStorage.setItem('logado','1');
+        // opcional: guarda usuário
+        sessionStorage.setItem('usuario','agendamaringa');
+        window.location.href = 'agenda.html';
+      } else {
+        ERR.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
