@@ -7,7 +7,6 @@
   <link rel="icon" type="image/jpeg" href="logo.jpeg">
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* leve reforço para centralizar */
     body.login-body{display:grid;place-items:center;min-height:100dvh;background:#fafafa;}
     .login-card{width:min(420px,92vw);background:#fff;border:1px solid #dcdfe6;border-radius:18px;padding:1.5rem;box-shadow:0 4px 16px rgba(0,0,0,.08)}
     .login-card h1{margin:.2rem 0 1rem;font-size:1.25rem}
@@ -34,7 +33,6 @@
     const FORM = document.getElementById('loginForm');
     const ERR = document.getElementById('err');
 
-    // Se já estiver logado, vai direto para a agenda
     if (sessionStorage.getItem('logado') === '1') {
       window.location.href = 'agenda.html';
     }
@@ -46,7 +44,6 @@
 
       if (u === 'agendamaringa' && p === 'maringa123') {
         sessionStorage.setItem('logado','1');
-        // opcional: guarda usuário
         sessionStorage.setItem('usuario','agendamaringa');
         window.location.href = 'agenda.html';
       } else {

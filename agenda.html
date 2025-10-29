@@ -1,111 +1,138 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Agenda | Soroterapia & EEG</title>
-<link rel="icon" type="image/jpeg" href="logo.jpeg">
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header class="topbar">
-    <div class="topbar-left">
-      <h1>Agenda Soro & EEG</h1>
-    </div>
-    <div class="topbar-right">
-      <button id="logoutBtn" class="btn ghost">Sair</button>
-    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Agenda Soro & EEG</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-  <main class="container">
-    <!-- Abas de tipo de agenda -->
-    <div class="tabs">
-      <button class="tab-btn active" data-type="soro">Soroterapia</button>
-      <button class="tab-btn" data-type="eeg">Eletroencefalograma</button>
-    </div>
+  <body>
+    <!-- TOPO -->
+    <header class="topnav">
+      <div class="topnav__wrap">
+        <div class="topnav__left">
+          <img class="topnav__logo" src="logo.jpeg" alt="Logo" />
+          <strong class="topnav__title">Agenda Soro & EEG</strong>
+        </div>
 
-    <!-- Controles do calendário (novo layout claro + segmented) -->
-    <section class="calendar-controls toolbar">
-      <div class="nav-pack">
-        <button id="prevBtn" class="icon-circle" title="Anterior">◀</button>
-        <button id="todayBtn" class="btn chip">Hoje</button>
-        <button id="nextBtn" class="icon-circle" title="Próximo">▶</button>
-      </div>
+        <div class="topnav__center">
+          <div class="topnav__group">
+            <button id="prevBtn" class="tbtn tbtn--icon" aria-label="Anterior">‹</button>
+            <span id="rangeLabel" class="topnav__range">—</span>
+            <button id="nextBtn" class="tbtn tbtn--icon" aria-label="Próximo">›</button>
+            <span class="topnav__sep"></span>
+            <button id="todayBtn" class="tbtn tbtn--ghost">Hoje</button>
+          </div>
 
-      <div class="range-and-views">
-        <span id="rangeLabel" class="range-label"></span>
-        <div class="segmented" role="tablist" aria-label="Mudar visão">
-          <button class="view-btn active" data-view="month" role="tab" aria-selected="true">Mês</button>
-          <button class="view-btn" data-view="week" role="tab" aria-selected="false">Semana</button>
-          <button class="view-btn" data-view="day" role="tab" aria-selected="false">Dia</button>
+          <div class="topnav__seg">
+            <button class="topnav__segbtn view-btn active" data-view="month">Mês</button>
+            <button class="topnav__segbtn view-btn" data-view="week">Semana</button>
+            <button class="topnav__segbtn view-btn" data-view="day">Dia</button>
+          </div>
+        </div>
+
+        <div class="topnav__right">
+          <div class="topnav__seg topnav__seg--light">
+            <button class="topnav__segbtn tab-btn active" data-type="soro">Soroterapia</button>
+            <button class="topnav__segbtn tab-btn" data-type="eeg">Eletroencefalograma</button>
+          </div>
+          <button id="openBlockModal" class="tbtn tbtn--ghost">Bloquear horários</button>
+          <button id="newApptBtn" class="tbtn tbtn--cta">Novo agendamento</button>
+          <button id="logoutBtn" class="tbtn tbtn--ghost">Sair</button>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- Calendário + painel lateral -->
-    <section class="calendar-shell">
-      <div id="calendar" class="calendar"></div>
+    <main class="calendar-shell">
+      <section id="calendar"></section>
+
       <aside class="side-panel">
-        <h3 id="sideTitle">Agendamentos do dia</h3>
+        <h3 id="sideTitle" style="margin-top:0">Agendamentos do dia</h3>
         <ul id="dayList" class="appt-list"></ul>
       </aside>
-    </section>
-  </main>
+    </main>
 
-  <!-- FAB: Novo agendamento -->
-  <button id="newApptBtn" class="fab" title="Novo Agendamento">+</button>
+    <!-- Modal de Agendamento -->
+    <div id="modalBackdrop" class="modal-backdrop hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="modalTitle">Novo Agendamento</h3>
+          <!-- (X) removido -->
+        </div>
 
-  <!-- Modal permanece igual -->
-  <div id="modalBackdrop" class="modal-backdrop hidden">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="modalTitle">Novo Agendamento</h3>
-        <button id="closeModal" class="icon-btn" aria-label="Fechar">✕</button>
+        <form id="apptForm" class="modal-flex">
+          <div class="modal-body">
+            <input type="hidden" id="apptId" />
+            <div class="grid-2">
+              <label>Data <input id="apptDate" type="date" required /></label>
+              <label>Hora <input id="apptTime" type="time" required /></label>
+              <label>Nome <input id="apptName" type="text" required placeholder="Nome do paciente" /></label>
+              <label>CPF <input id="apptCPF" type="text" required placeholder="000.000.000-00" /></label>
+              <label>Telefone <input id="apptPhone" type="text" required placeholder="(00) 00000-0000" /></label>
+              <label>Status
+                <select id="apptStatus" required>
+                  <option value="MARCADO">MARCADO</option>
+                  <option value="CONFIRMADO">CONFIRMADO</option>
+                  <option value="FEITO">FEITO</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="deleteBtn" class="btn" style="display:none">Excluir</button>
+            <div style="flex:1"></div>
+            <button type="button" class="btn" id="cancelAppt">Cancelar</button>
+            <button type="submit" class="btn primary">Salvar</button>
+          </div>
+        </form>
       </div>
-      <form id="apptForm" class="modal-body">
-        <div class="grid-2">
-          <label>Data
-            <input type="date" id="apptDate" required />
-          </label>
-          <label>Hora
-            <input type="time" id="apptTime" required />
-          </label>
-        </div>
-        <div class="grid-2">
-          <label>Nome do Paciente
-            <input type="text" id="apptName" required placeholder="Nome completo" />
-          </label>
-          <label>CPF
-            <input type="text" id="apptCPF" required placeholder="000.000.000-00" />
-          </label>
-        </div>
-        <div class="grid-2">
-          <label>Telefone
-            <input type="tel" id="apptPhone" required placeholder="(00) 00000-0000" />
-          </label>
-          <label>Status
-                  <select id="apptStatus" required>
-          <option value="MARCADO">MARCADO</option>
-          <option value="CONFIRMADO">CONFIRMADO</option>
-          <option value="FEITO">FEITO</option> <!-- ⬅ novo -->
-        </select>
-
-          </label>
-        </div>
-        <input type="hidden" id="apptId" />
-        <div class="modal-footer">
-          <button type="button" id="deleteBtn" class="btn danger hidden">Excluir</button>
-          <button type="submit" class="btn primary">Salvar</button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <script src="script.js"></script>
-  <script>
-    if (!sessionStorage.getItem('logado')) {
-      window.location.href = 'login.html';
-    }
-  </script>
-</body>
+    <!-- Modal de Bloqueios -->
+    <div id="blockBackdrop" class="modal-backdrop hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Bloquear horários do dia</h3>
+          <!-- (X) removido -->
+        </div>
+
+        <div class="modal-flex">
+          <div class="modal-body">
+            <div class="grid-2">
+              <label>Data <input id="blockDate" type="date" required /></label>
+              <label>Tipo
+                <select id="blockType">
+                  <option value="soro">Soroterapia</option>
+                  <option value="eeg">Eletroencefalograma</option>
+                </select>
+              </label>
+              <label>Início <input id="blockStart" type="time" required value="07:00" /></label>
+              <label>Fim    <input id="blockEnd" type="time" required value="20:00" /></label>
+            </div>
+
+            <label>Motivo (opcional)
+              <input id="blockReason" type="text" placeholder="Ex.: Reunião, manutenção, feriado..." />
+            </label>
+
+            <h4 style="margin-top:1rem">Bloqueios do dia</h4>
+            <ul id="blockList" class="appt-list"></ul>
+          </div>
+
+          <div class="modal-footer">
+            <button id="saveBlock" class="btn primary">Salvar bloqueio</button>
+            <button id="cancelBlock" class="btn">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      document.getElementById('cancelAppt')?.addEventListener('click', () => {
+        document.getElementById('modalBackdrop')?.classList.add('hidden');
+      });
+    </script>
+  </body>
 </html>
